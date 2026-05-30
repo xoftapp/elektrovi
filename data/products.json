@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "name": "iPhone 15 Pro Max 256Go",
+    "category": "telephones",
+    "condition": "neuf",
+    "price": 850000,
+    "salePrice": 799000,
+    "description": "Le dernier smartphone Apple avec puce A17 Pro, écran Super Retina XDR.",
+    "images": [
+      "https://placehold.co/400x400/1e293b/ffffff?text=iPhone+15+Face",
+      "https://placehold.co/400x400/334155/ffffff?text=iPhone+15+Dos",
+      "https://placehold.co/400x400/475569/ffffff?text=iPhone+15+Profil"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Routeur Wi-Fi 6 TP-Link Archer AX50",
+    "category": "connectivite",
+    "condition": "neuf",
+    "price": 85000,
+    "salePrice": null,
+    "description": "Routeur double bande ultra-rapide, idéal streaming 4K et gaming.",
+    "images": [
+      "https://placehold.co/400x400/0f172a/ffffff?text=Routeur+Vue+1",
+      "https://placehold.co/400x400/1e293b/ffffff?text=Routeur+Vue+2",
+      "https://placehold.co/400x400/334155/ffffff?text=Routeur+Vue+3"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "MacBook Air M2 13 pouces",
+    "category": "informatique",
+    "condition": "occasion",
+    "price": 950000,
+    "salePrice": 875000,
+    "description": "Ordinateur portable léger et puissant. Batterie à 92%, garantie 3 mois.",
+    "images": [
+      "https://placehold.co/400x400/2563eb/ffffff?text=MacBook+Ouvert",
+      "https://placehold.co/400x400/1d4ed8/ffffff?text=MacBook+Fermé",
+      "https://placehold.co/400x400/3b82f6/ffffff?text=MacBook+Ports"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Climatiseur Inverter Samsung 12000 BTU",
+    "category": "electromenager",
+    "condition": "neuf",
+    "price": 420000,
+    "salePrice": null,
+    "description": "Climatiseur économe, silencieux, mode nuit, filtration avancée.",
+    "images": [
+      "https://placehold.co/400x400/f59e0b/ffffff?text=Clim+Face",
+      "https://placehold.co/400x400/d97706/ffffff?text=Clim+Télécommande",
+      "https://placehold.co/400x400/b45309/ffffff?text=Clim+Unité+Ext"
+    ]
+  }
+]

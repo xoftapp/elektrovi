@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ELEKTROVI | E-Boutique de Proximité</title>
+  <meta name="description" content="ELEKTROVI : Le smart shopping, neuf comme occasion, au meilleur prix.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-content">
+      <a href="#" class="logo">ELEKTROVI</a>
+      <nav class="nav">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <button id="cat-btn" class="nav-link">📂 Catégories <i class="fa-solid fa-chevron-down"></i></button>
+            <ul id="cat-menu" class="dropdown-menu">
+              <li><a href="#" class="dropdown-item" data-cat="all">✨ Tous les produits</a></li>
+              <li><a href="#" class="dropdown-item" data-cat="telephones">📱 Téléphones & Accessoires</a></li>
+              <li><a href="#" class="dropdown-item" data-cat="connectivite">📡 Connectivité & Réseau</a></li>
+              <li><a href="#" class="dropdown-item" data-cat="informatique">💻 Informatique</a></li>
+              <li><a href="#" class="dropdown-item" data-cat="electromenager">🌡️ Électroménager</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a href="#produits" class="nav-link">🛍️ Produits</a></li>
+          <li class="nav-item"><a href="#footer-contact" class="nav-link">📞 Contact</a></li>
+        </ul>
+      </nav>
+      <button id="cart-btn" class="cart-btn" aria-label="Panier">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-badge" class="badge">0</span>
+      </button>
+      <button id="mobile-btn" class="mobile-btn"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-text">
+      <h1>BIENVENUE SUR VOTRE E-BOUTIQUE DE PROXIMITÉ</h1>
+      <p>Le smart shopping, neuf comme occasion, au meilleur prix</p>
+      <a href="#produits" class="btn btn-primary">Découvrir les offres</a>
+    </div>
+    <div class="hero-carousel">
+      <div class="carousel-track" id="carousel">
+        <div class="slide"><img src="./images/carousel-1.jpg" alt="1" onerror="this.src='https://placehold.co/1200x400/1e293b/60a5fa?text=📱+Smartphones'"></div>
+        <div class="slide"><img src="./images/carousel-2.jpg" alt="2" onerror="this.src='https://placehold.co/1200x400/0f172a/f59e0b?text=📡+Connectivité'"></div>
+        <div class="slide"><img src="./images/carousel-3.jpg" alt="3" onerror="this.src='https://placehold.co/1200x400/1e293b/10b981?text=💻+Informatique'"></div>
+      </div>
+      <button class="c-btn prev" id="c-prev"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="c-btn next" id="c-next"><i class="fa-solid fa-chevron-right"></i></button>
+      <div class="dots" id="c-dots">
+        <span class="dot active" data-i="0"></span>
+        <span class="dot" data-i="1"></span>
+        <span class="dot" data-i="2"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="categories" class="section">
+    <div class="container">
+      <h2 class="title">Parcourir par catégorie</h2>
+      <div class="cat-grid">
+        <div class="cat-card" data-cat="telephones"><span class="icon">📱</span><h3>Téléphones & Accessoires</h3></div>
+        <div class="cat-card" data-cat="connectivite"><span class="icon">📡</span><h3>Connectivité & Réseau</h3></div>
+        <div class="cat-card" data-cat="informatique"><span class="icon">💻</span><h3>Informatique</h3></div>
+        <div class="cat-card" data-cat="electromenager"><span class="icon">🌡️</span><h3>Électroménager</h3></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="produits" class="section bg-light">
+    <div class="container">
+      <h2 class="title">Nos produits</h2>
+      <div id="grid" class="grid"></div>
+      <p id="empty-msg" style="display:none; text-align:center; padding:40px; color:#64748b;">Aucun produit dans cette catégorie.</p>
+    </div>
+  </section>
+
+  <!-- MODAL DÉTAILS PRODUIT -->
+  <div id="product-modal" class="modal">
+    <div class="modal-box product-modal-box">
+      <button class="close-modal" id="close-product">&times;</button>
+      <div id="product-content"></div>
+    </div>
+  </div>
+
+  <!-- MODAL PANIER -->
+  <div id="cart-modal" class="modal">
+    <div class="modal-box cart-box">
+      <div class="modal-head"><h3>🛒 Votre panier</h3><button class="close">&times;</button></div>
+      <div id="cart-list" class="cart-list"></div>
+      <div class="modal-foot">
+        <div class="total">Total : <span id="cart-total">0 FCFA</span></div>
+        <button id="checkout-btn" class="btn btn-primary btn-block">Valider la commande</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL COMMANDE -->
+  <div id="checkout-modal" class="modal">
+    <div class="modal-box checkout-box">
+      <div class="modal-head"><h3>📦 Finaliser la commande</h3><button class="close">&times;</button></div>
+      <form id="checkout-form" class="checkout-form">
+        <div class="form-row">
+          <div class="field">
+            <label>Nom complet *</label>
+            <input name="lastname" required placeholder="Ex: KOUAME">
+          </div>
+          <div class="field">
+            <label>Prénom *</label>
+            <input name="firstname" required placeholder="Ex: Jean">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Téléphone WhatsApp *</label>
+            <input name="phone" type="tel" required placeholder="+228 90 XX XX XX">
+          </div>
+          <div class="field">
+            <label>Email (optionnel)</label>
+            <input name="email" type="email" placeholder="exemple@email.com">
+          </div>
+        </div>
+        <div class="field full-width">
+          <label>Adresse de livraison complète *</label>
+          <input name="address" required placeholder="Quartier, rue, repère, ville...">
+        </div>
+        <div class="field full-width">
+          <label>Notes / Instructions</label>
+          <textarea name="notes" rows="3" placeholder="Heure de livraison préférée, code d'accès, etc."></textarea>
+        </div>
+        <div id="form-err" class="err"></div>
+        <div class="actions">
+          <button type="button" id="back-cart" class="btn btn-sec">Retour au panier</button>
+          <button type="submit" class="btn btn-primary">Confirmer & Envoyer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer id="footer-contact" class="footer">
+    <div class="container footer-flex">
+      <div class="footer-brand"><h3>ELEKTROVI</h3><p>Votre e-boutique de proximité au Togo.</p></div>
+      <div class="footer-contact"><p>📧 davhbiz@gmail.com</p><p>📞 +228 90 39 37 20</p></div>
+    </div>
+    <div class="footer-bot"><p>&copy; <span id="year"></span> ELEKTROVI.</p></div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
