@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   console.log('✅ ELEKTROVI initialisé');
   
-  const SHEET_API = 'https://script.google.com/macros/s/TON_ID_ICI/exec';
+  const SHEET_API = 'https://script.google.com/macros/s/AKfycbyAjeXn1q64KnVpkEflui5L_bSQHmd1nHYXzm2wxcFe67BSrX0gHoXc9ofyx99UNZru/exec';
 
   try { if(typeof emailjs !== 'undefined') emailjs.init('HLzQ95uBYNm6V4kJW'); } catch(e) {}
 
