@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   console.log('✅ ELEKTROVI initialisé');
   
-  const SHEET_API = 'https://script.google.com/macros/s/AKfycbyAjeXn1q64KnVpkEflui5L_bSQHmd1nHYXzm2wxcFe67BSrX0gHoXc9ofyx99UNZru/exec';
+  const SHEET_API = 'https://script.google.com/macros/s/TON_ID_ICI/exec';
 
   try { if(typeof emailjs !== 'undefined') emailjs.init('HLzQ95uBYNm6V4kJW'); } catch(e) {}
 
@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
     cartBtn: $('cart-btn'), cartBadge: $('cart-badge'), cartModal: $('cart-modal'), cartList: $('cart-list'), cartTotal: $('cart-total'),
     checkoutBtn: $('checkout-btn'), checkoutModal: $('checkout-modal'), checkoutForm: $('checkout-form'), formErr: $('form-err'),
     carousel: $('carousel'), cPrev: $('c-prev'), cNext: $('c-next'), dots: document.querySelectorAll('.dot'),
-    productModal: $('product-modal'), productContent: $('product-content'), closeProduct: $('close-product')
+    productModal: $('product-modal'), productContent: $('product-content'), closeProduct: $('close-product'),
+    mobileBtn: $('mobile-btn'), navList: document.querySelector('.nav-list')
   };
 
   const fmt = p => new Intl.NumberFormat('fr-FR').format(p) + ' FCFA';
@@ -91,14 +92,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const catLabels = {'telephones':'📱 Téléphones & Accessoires','connectivite':'📡 Connectivité & Réseau','informatique':'💻 Informatique','electromenager':'🌡️ Électroménager'};
     
     els.productContent.innerHTML = `
-      <div class="product-detail">
-        <div class="product-detail-img"><img src="${p.images?.[0]||'https://placehold.co/600x600/e2e8f0/64748b?text=Produit'}" alt="${p.name}" onerror="this.src='https://placehold.co/600x600/e2e8f0/64748b?text=Image'"></div>
-        <div class="product-detail-info">
-          <div class="product-detail-header"><h2 class="product-detail-name">${p.name}</h2><div class="product-detail-price">${priceHTML}</div><span class="badge-cond ${condClass}" style="display:inline-block;margin-top:8px">${condLabel}</span></div>
-          <div class="product-detail-meta"><p><strong>📂 Catégorie:</strong> ${catLabels[p.category]||p.category}</p><p><strong>🔖 Référence:</strong> #${p.id}</p><p><strong>✅ Disponibilité:</strong> ${p.condition==='neuf'?'En stock (Neuf)':'En stock (Occasion vérifiée)'}</p></div>
-          <div class="product-detail-desc"><h3>📋 Description complète</h3><p>${p.description}</p></div>
-          <div class="product-detail-actions"><button class="btn btn-primary" onclick="addToCartFromModal()" style="flex:2"><i class="fa-solid fa-cart-plus"></i> Ajouter au panier</button><button class="btn btn-sec" onclick="closeProductModal()" style="flex:1">Fermer</button></div>
+      <div class="product-detail-scroll">
+        <div class="product-detail">
+          <div class="product-detail-img"><img src="${p.images?.[0]||'https://placehold.co/600x600/e2e8f0/64748b?text=Produit'}" alt="${p.name}" onerror="this.src='https://placehold.co/600x600/e2e8f0/64748b?text=Image'"></div>
+          <div class="product-detail-info">
+            <div class="product-detail-header"><h2 class="product-detail-name">${p.name}</h2><div class="product-detail-price">${priceHTML}</div><span class="badge-cond ${condClass}" style="display:inline-block;margin-top:8px">${condLabel}</span></div>
+            <div class="product-detail-meta"><p><strong>📂 Catégorie:</strong> ${catLabels[p.category]||p.category}</p><p><strong>🔖 Référence:</strong> #${p.id}</p><p><strong>✅ Disponibilité:</strong> ${p.condition==='neuf'?'En stock (Neuf)':'En stock (Occasion vérifiée)'}</p></div>
+            <div class="product-detail-desc"><h3>📋 Description complète</h3><p>${p.description}</p></div>
+          </div>
         </div>
+      </div>
+      <div class="product-detail-actions">
+        <button class="btn btn-primary" onclick="addToCartFromModal()"><i class="fa-solid fa-cart-plus"></i> Ajouter au panier</button>
+        <button class="btn btn-sec" onclick="closeProductModal()">Fermer</button>
       </div>`;
     els.productModal.classList.add('active'); document.body.style.overflow = 'hidden';
   };
@@ -111,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
     saveCart(); updateBadge(); alert('✅ Produit ajouté au panier !'); closeProductModal();
   };
 
+  // FILTRE
   els.catBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); els.catMenu.classList.toggle('open'); });
   document.addEventListener('click', e => { if(!els.catBtn.contains(e.target) && !els.catMenu.contains(e.target)) els.catMenu.classList.remove('open'); });
   els.catMenu.addEventListener('click', e => {
@@ -126,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
     c.style.borderColor = 'var(--p)'; renderGrid(); $('produits').scrollIntoView({behavior:'smooth'});
   }));
 
+  // CARROUSEL
   let slide = 0; const totalSlides = 3;
   const goSlide = i => { slide = (i + totalSlides) % totalSlides; els.carousel.style.transform = `translateX(-${slide*100}%)`; els.dots.forEach((d,j)=>d.classList.toggle('active', j===slide)); };
   els.cPrev?.addEventListener('click', ()=>goSlide(slide-1));
@@ -133,6 +141,18 @@ document.addEventListener('DOMContentLoaded', function() {
   els.dots.forEach(d => d.addEventListener('click', ()=>goSlide(+d.dataset.i)));
   setInterval(()=>goSlide(slide+1), 4000);
 
+  // MENU MOBILE - CORRECTION
+  els.mobileBtn.addEventListener('click', () => {
+    els.navList.classList.toggle('mobile-open');
+  });
+  // Fermer le menu si on clique en dehors
+  document.addEventListener('click', (e) => {
+    if (!els.mobileBtn.contains(e.target) && !els.navList.contains(e.target)) {
+      els.navList.classList.remove('mobile-open');
+    }
+  });
+
+  // PANIER
   els.cartBtn.addEventListener('click', () => { renderCart(); els.cartModal.classList.add('active'); });
   document.querySelectorAll('.close').forEach(b => b.addEventListener('click', () => { els.cartModal.classList.remove('active'); els.checkoutModal.classList.remove('active'); }));
   document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if(e.target===m) m.classList.remove('active'); }));
@@ -168,6 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  // COMMANDE
   els.checkoutBtn.addEventListener('click', () => { if(!cart.length) return alert('Panier vide.'); els.cartModal.classList.remove('active'); els.checkoutModal.classList.add('active'); });
   $('back-cart').addEventListener('click', () => { els.checkoutModal.classList.remove('active'); renderCart(); els.cartModal.classList.add('active'); });
 
@@ -190,13 +211,11 @@ document.addEventListener('DOMContentLoaded', function() {
       total:cart.reduce((s,i)=>s+i.price*i.qty,0)
     };
 
-    // WhatsApp
     let wa = `NOUVELLE COMMANDE ELEKTROVI\nRef: ${order.id}\n\nCLIENT: ${order.client.nom} ${order.client.prenom}\nTel: ${order.client.tel}\nAdr: ${order.client.adr}\n\nARTICLES:\n`;
     order.items.forEach(i=>wa+=`- ${i.nom} x${i.qty} = ${fmt(i.sous)}\n`);
     wa+=`\nTOTAL: ${fmt(order.total)}\nMerci de confirmer.`;
     window.open(`https://wa.me/22890393720?text=${encodeURIComponent(wa)}`, '_blank');
 
-    // Email
     try {
       const itemsList = order.items.map(i => `• ${i.nom} (x${i.qty}) = ${fmt(i.sous)}`).join('\n');
       await emailjs.send('service_7kf80k3', 'template_8b6thud', {
@@ -209,13 +228,6 @@ document.addEventListener('DOMContentLoaded', function() {
     alert('✅ Commande envoyée !');
     cart = []; saveCart(); updateBadge(); renderCart(); els.checkoutModal.classList.remove('active'); els.checkoutForm.reset();
     sub.disabled = false; sub.textContent = 'Confirmer & Envoyer';
-  });
-
-  $('mobile-btn').addEventListener('click', () => {
-    const nav = document.querySelector('.nav-list');
-    const hide = nav.style.display==='none'||!nav.style.display;
-    nav.style.display = hide ? 'flex' : 'none';
-    if(hide) nav.style.cssText = 'flex-direction:column;position:absolute;top:70px;right:20px;background:#fff;padding:15px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:99;';
   });
 
   $('year').textContent = new Date().getFullYear();
